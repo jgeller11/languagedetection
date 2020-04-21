@@ -98,7 +98,7 @@ function train(english, spanish, characters) {
   for(var i=0; i<characters.length; i++) {
     pesos1[i]=pesos1[i]/pesosNorm
     weights1[i]=weights1[i]/weightsNorm
-    comp.push(weights1[i]-pesos1[i])
+    comp.push((100*weights1[i]+pesos1[i])/(100*pesos1[i]+weights1[i])-(weights1[i]+100*pesos1[i])/(pesos1[i]+100*weights1[i]))
   }
 
   var pesos2Norm = 0;
@@ -124,7 +124,9 @@ function train(english, spanish, characters) {
 
       weights2[i][j]=weights2[i][j]/weights2Norm
       // console.log(weights2[i][j])
-      y.push(weights2[i][j]-pesos2[i][j])
+      if(weights2[i][j]+pesos2[i][j]!=0){
+        y.push((100*weights2[i][j]+pesos2[i][j])/(weights2[i][j]+100*pesos2[i][j])-(weights2[i][j]+100*pesos2[i][j])/(100*weights2[i][j]+pesos2[i][j]))
+      } else {y.push(0)}
       // console.log(weights2[i][j])
     }
     comp2.push(y)
@@ -166,17 +168,21 @@ function check(compweights, test, characters){
 //   // document.getElementById("outputtest").innerHTML=train("pqowieurtqpowieuryqoiweyuroqiweuyrqoiweuyrtqowiuryqpowieruyqtpowieruyqopwiruypqoiwruytqpowieryqpowieruytpqowiureypoiquwyrt","laskjdfhlaksjdhflaksjdhflkjasdhflkjahsdlfkjahslkdfjahsdlkfjhaslkjfhalskjdhflaksjhflkasjhdflakjshflkjahslkdjfhalksjdhflkasjdhflkasjdhflaksjdhf",characters)
 // }
 function test() {
-  max=(check(train(exampleEng,exampleEsp,characters),exampleEng, characters)-check(train(exampleEng,exampleEsp,characters),exampleEsp, characters))/2
+  lang1text=document.getElementById('lang1sample').value
+  lang1name=document.getElementById('lang1name').value
+  lang2text=document.getElementById('lang2sample').value
+  lang2name=document.getElementById('lang2name').value
+  max=(check(train(lang1text,lang2text,characters),lang1text, characters)-check(train(lang1text,lang2text,characters),lang2text, characters))/2
   console.log(max)
   msg=document.getElementById("inputField").value
   console.log(msg)
-  var score = check(train(exampleEng,exampleEsp,characters),msg, characters)/max
+  var score = check(train(lang1text,lang2text,characters),msg, characters)/max
   score=Math.round(score*1000)/1000
   if(score>0){
-    outputMessage="English, confidence score of "+(score).toString();
+    outputMessage=lang1name+", confidence score of "+(score).toString();
   }
   if(score<0) {
-    outputMessage="Spanish, confidence score of "+(-score).toString();
+    outputMessage=lang2name+", confidence score of "+(-score).toString();
   }
   if (score=0){
     outputMessage="I think you submitted an empty string or something."
