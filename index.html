@@ -1,0 +1,15 @@
+<html>
+  <head>
+    <script language="javascript" type="text/javascript" src="main.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title> Language Detector</title>
+  </head>
+  <body>
+    <h1> Spanish/English Language Detector</h1>
+    <p class="info"> Input any reasonable amount of Spanish or English text into the box and press "test" to see whether the program can correctly predict the language. A confidence score of 1 means the program is very confident, whereas a confidence score anywhere below 0.5 means the program probably isn't very sure. Training data is the script for the Bee Movie for English, and the Spanish Wikipedia page for Spanish Wikipedia for Spanish.</p>
+    <textarea id="inputField"></textarea><br>
+    <button onclick="test()">test</button>
+    <p id="outputtest" class="output"> </p>
+
+  </body>
+</html>
